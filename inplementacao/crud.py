@@ -8,7 +8,7 @@ def cadastrar_aluno(nome: str, cpf: str, email: str):
     try:
         cursor = conn.cursor()
         # No pyodbc (ODBC padrão), usa-se '?' como marcador de parâmetro
-        sql = "INSERT INTO alunos (nome, cpf, email) VALUES (?, ?, ?)"
+        sql = "INSERT INTO aluno (nome, cpf, email) VALUES (?, ?, ?)"
         cursor.execute(sql, (nome, cpf, email))
         conn.commit()
         print("✓ Aluno cadastrado com sucesso!")
@@ -24,7 +24,7 @@ def listar_alunos():
         return []
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nome, cpf, email FROM alunos")
+        cursor.execute("SELECT id, nome, cpf, email FROM aluno")
         rows = cursor.fetchall()
         return rows
     except pyodbc.Error as e:
@@ -39,7 +39,7 @@ def cadastrar_plano(nome: str, valor: float, duracao_meses: int):
         return
     try:
         cursor = conn.cursor()
-        sql = "INSERT INTO planos (nome, valor, duracao_meses) VALUES (?, ?, ?)"
+        sql = "INSERT INTO plano (nome, valor, duracao_meses) VALUES (?, ?, ?)"
         cursor.execute(sql, (nome, valor, duracao_meses))
         conn.commit()
         print("✓ Plano cadastrado com sucesso!")
@@ -55,7 +55,7 @@ def listar_planos():
         return []
     try:
         cursor = conn.cursor()
-        cursor.execute("SELECT id, nome, valor, duracao_meses FROM planos")
+        cursor.execute("SELECT id, nome, valor, duracao_meses FROM plano")
         rows = cursor.fetchall()
         return rows
     except pyodbc.Error as e:
