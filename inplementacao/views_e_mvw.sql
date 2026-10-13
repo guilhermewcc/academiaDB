@@ -22,7 +22,7 @@ SELECT
 	
 FROM aluno a 
 INNER JOIN matricula m ON a.id = m.aluno_id
-INNER JOIN plano p ON m.plano_id = p.id
+INNER JOIN plano p ON m.plano_id = p.id;
 
 
 CREATE or REPLACE VIEW vw_treino_aluno AS
@@ -36,7 +36,7 @@ SELECT
 FROM aluno a 
 INNER JOIN matricula m ON a.id = m.aluno_id
 INNER JOIN treino t ON t.matricula_id = m.id
-INNER JOIN professor p ON p.id = t.professor_id
+INNER JOIN professor p ON p.id = t.professor_id;
 
 CREATE or REPLACE VIEW vw_treino_professor AS
 SELECT
@@ -47,7 +47,7 @@ SELECT
 	p.cpf AS professor_cpf
 	
 FROM treino t 
-INNER JOIN professor p ON p.id = t.professor_id
+INNER JOIN professor p ON p.id = t.professor_id;
 
 CREATE or REPLACE VIEW vw_treino_exercicio AS
 SELECT
@@ -59,7 +59,7 @@ SELECT
 	e.grupo_muscular AS exercicio_grupo_muscular
 FROM treino_exercicio te
 INNER JOIN treino t ON te.treino_id =  t.id
-INNER JOIN exercicio e ON te.exercicio_id = e.id
+INNER JOIN exercicio e ON te.exercicio_id = e.id;
 
 
 CREATE OR REPLACE VIEW vw_exercicio_categoria AS
@@ -125,7 +125,7 @@ FROM treino_exercicio te
 INNER JOIN treino t ON t.id = te.treino_id
 INNER JOIN matricula m ON t.matricula_id = m.id
 INNER JOIN aluno a ON a.id = m.aluno_id
-INNER JOIN exercicio e ON e.id = te.exercicio_id
+INNER JOIN exercicio e ON e.id = te.exercicio_id;
 
 CREATE or REPLACE VIEW vw_treinos_completos AS
 SELECT
@@ -143,7 +143,7 @@ SELECT
 FROM treino t
 INNER JOIN matricula m ON t.matricula_id = m.id
 INNER JOIN aluno a ON a.id = m.aluno_id
-INNER JOIN professor p ON p.id = t.professor_id
+INNER JOIN professor p ON p.id = t.professor_id;
 
 -- ============================================================
 -- Materialized Views
