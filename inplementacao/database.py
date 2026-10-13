@@ -6,7 +6,7 @@ HOST = "localhost"
 PORT = 5432
 DATABASE = "academia"
 USER = "postgres"
-PASSWORD = "chtnd"
+PASSWORD = "PSSWD"
 DRIVER = "PostgreSQL Unicode"  # Nome do Driver ODBC instalado no SO
 
 CONN_STR = (
