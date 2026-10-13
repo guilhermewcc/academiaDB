@@ -127,15 +127,3 @@ CREATE TABLE treino_exercicio (
     CONSTRAINT treino_exercicio_descanso_check
         CHECK (descanso_segundos IS NULL OR descanso_segundos >= 0)
 );
-
-CREATE or REPLACE VIEW vw_treino_exercicio AS
-SELECT
-	t.id AS treino_id,
-	t.nome AS treino_nome,
-	t.objetivo AS treino_objetivo,
-	e.id AS exercicio_id,
-	e.nome AS exercicio_nome,
-	e.grupo_muscular AS exercicio_grupo_muscular
-FROM treino_exercicio te
-INNER JOIN treino t ON te.treino_id =  t.id
-INNER JOIN exercicio e ON te.exercicio_id = e.id
