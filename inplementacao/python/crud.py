@@ -1,4 +1,4 @@
-"""Acesso a dados do AcademiaDB. Consultas parametrizadas e transações seguras."""
+
 import pyodbc
 from database import get_connection
 
