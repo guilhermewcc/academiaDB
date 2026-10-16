@@ -33,32 +33,3 @@ $env:ACADEMIA_DB_PASSWORD="SUA_SENHA"
 $env:ACADEMIA_DB_DRIVER="PostgreSQL Unicode"
 python main.py
 ```
-
-Linux/macOS:
-```bash
-source .venv/bin/activate
-python -m pip install -r requirements.txt
-export ACADEMIA_DB_HOST=localhost
-export ACADEMIA_DB_PORT=5432
-export ACADEMIA_DB_NAME=academia
-export ACADEMIA_DB_USER=postgres
-export ACADEMIA_DB_PASSWORD='SUA_SENHA'
-export ACADEMIA_DB_DRIVER='PostgreSQL Unicode'
-python main.py
-```
-
-Substitua `SUA_SENHA` pela senha local. Não publique credenciais no GitHub. Se o driver tiver outro nome no computador, ajuste `ACADEMIA_DB_DRIVER`.
-
-## Funcionalidades
-- Cadastro e listagem de alunos, planos, professores e exercícios.
-- Cadastro e listagem de matrículas.
-- Cadastro de treinos e associação de exercícios aos treinos.
-- Relatórios com `AVG`, `COUNT`, `GROUP BY` e `JOIN`.
-- Exclusão por ID em alunos, planos, professores e exercícios, protegida por confirmação e pelas chaves estrangeiras.
-- Mensagens de erro de conexão e de integridade.
-
-## Observações
-- A inicialização faz apenas uma consulta de teste, `SELECT current_database(), current_user`.
-- A aplicação não executa `schema.sql`, `insercoes.sql` nem `consultas.sql`.
-- Os exemplos acadêmicos completos devem permanecer em `consultas.sql` para execução direta no PostgreSQL.
-- As ações escolhidas no menu podem modificar dados (inserir ou excluir). A inicialização em si não modifica o banco.
