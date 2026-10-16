@@ -1,7 +1,5 @@
 # AcademiaDB — Python
 
-Esta versão usa o banco PostgreSQL existente e **não executa `schema.sql` automaticamente**. Portanto, iniciar o programa não recria tabelas nem apaga dados.
-
 ## Arquivos
 - `main.py`: menus e validação de entrada.
 - `database.py`: conexão ODBC configurável por variáveis de ambiente.
