@@ -1,4 +1,4 @@
-"""Interface de terminal do AcademiaDB. Não executa schema.sql nem apaga dados."""
+
 from datetime import date
 import pyodbc
 import crud
