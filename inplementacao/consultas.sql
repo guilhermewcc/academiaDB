@@ -1,5 +1,9 @@
 -- ============================================================
---  CONSULTAS BÁSICAS APRESENTADAS NOS SLIDES
+-- CONSULTAS
+-- ============================================================
+
+-- ============================================================
+-- CONSULTAS BÁSICAS
 -- ============================================================
 
 -- SELECT
@@ -40,9 +44,10 @@ WHERE nome LIKE '%a%';
 
 
 -- ============================================================
---  JOIN
+-- JOIN
 -- ============================================================
 
+-- INNER JOIN
 SELECT
     a.nome AS aluno,
     p.nome AS plano,
@@ -52,10 +57,45 @@ INNER JOIN matricula m ON m.aluno_id = a.id
 INNER JOIN plano p ON p.id = m.plano_id
 ORDER BY a.nome;
 
+-- LEFT JOIN
+SELECT
+    p.id AS professor_id,
+    p.nome AS professor,
+    COUNT(t.id) AS quantidade_treinos
+FROM professor p
+LEFT JOIN treino t
+    ON p.id = t.professor_id
+GROUP BY p.id, p.nome
+ORDER BY quantidade_treinos DESC;
+
+-- RIGHT JOIN
+SELECT 
+    p.nome AS professor_nome,
+    t.nome AS treino_nome,
+    t.objetivo
+FROM treino t
+RIGHT JOIN professor p ON t.professor_id = p.id;
+
+-- FULL OUTER
+SELECT 
+    p.nome AS professor_nome,
+    t.nome AS treino_nome,
+    t.data_criacao
+FROM professor p
+FULL OUTER JOIN treino t ON t.professor_id = p.id;
+
+-- NATURAL JOIN
+SELECT 
+    nome, 
+    status, 
+    data_inicio
+FROM aluno
+NATURAL JOIN matricula;
+
 
 -- ============================================================
---  FUNÇÕES DE AGREGAÇÃO
---    Slides: AVG, MIN, MAX, SUM e COUNT
+-- FUNÇÕES DE AGREGAÇÃO
+-- Slides: AVG, MIN, MAX, SUM e COUNT
 -- ============================================================
 
 -- AVG(): média
@@ -104,7 +144,7 @@ ORDER BY carga_media DESC;
 
 
 -- ============================================================
---  SUBCONSULTAS
+-- SUBCONSULTAS
 -- ============================================================
 
 -- IN
@@ -153,7 +193,7 @@ FROM plano p;
 
 
 -- ============================================================
---  CASE
+-- CASE
 -- ============================================================
 
 SELECT
@@ -168,7 +208,7 @@ FROM plano;
 
 
 -- ============================================================
---  FUNÇÕES DE RANKING APRESENTADAS NOS SLIDES
+-- FUNÇÕES DE RANKING
 --    RANK, DENSE_RANK, PERCENT_RANK, CUME_DIST,
 --    ROW_NUMBER e NTILE
 -- ============================================================
@@ -226,7 +266,7 @@ ORDER BY faixa, p.valor DESC;
 
 
 -- ============================================================
--- 10. RANKING POR PARTIÇÃO
+-- RANKING POR PARTIÇÃO
 -- ============================================================
 
 SELECT
@@ -244,7 +284,7 @@ ORDER BY e.grupo_muscular, ranking_no_grupo;
 
 
 -- ============================================================
--- 11. WINDOW FUNCTION COM SUM()
+-- WINDOW FUNCTION COM SUM()
 -- ============================================================
 
 SELECT
@@ -262,9 +302,7 @@ ORDER BY m.id;
 
 
 -- ============================================================
--- 12. GROUPING + CUBE
---     O slide apresenta GROUPING() e CUBE().
---     PostgreSQL possui suporte a ambos.
+-- GROUPING + CUBE
 -- ============================================================
 
 SELECT
@@ -281,7 +319,7 @@ ORDER BY e.grupo_muscular, e.nome;
 
 
 -- ============================================================
--- 13. ROLLUP
+-- ROLLUP
 -- ============================================================
 
 SELECT
@@ -293,3 +331,116 @@ INNER JOIN treino_exercicio te ON te.exercicio_id = e.id
 WHERE te.carga IS NOT NULL
 GROUP BY ROLLUP (e.grupo_muscular, e.nome)
 ORDER BY e.grupo_muscular, e.nome;
+
+-- ============================================================
+-- UNION
+-- ============================================================
+
+SELECT nome FROM aluno
+UNION
+SELECT nome FROM professor;
+
+-- ============================================================
+-- UNION ALL    
+-- ============================================================
+
+SELECT nome FROM aluno
+UNION ALL
+SELECT nome FROM professor;
+
+-- ============================================================
+-- INTERSECT   
+-- ============================================================
+
+WITH ativos AS (
+	SELECT nome FROM aluno a
+	INNER JOIN matricula m ON m.aluno_id = a.id
+	WHERE m.status = 'ATIVA'
+)
+SELECT a.nome FROM aluno a
+INNER JOIN matricula m ON m.aluno_id = a.id
+INNER JOIN plano p ON m.plano_id = p.id
+WHERE p.nome = 'Mensal'
+intersect
+SELECT nome FROM ativos;
+
+-- ============================================================
+-- EXCEPT
+-- ============================================================
+
+WITH ativos AS (
+	SELECT nome FROM aluno a
+	INNER JOIN matricula m ON m.aluno_id = a.id
+	WHERE m.status = 'ATIVA'
+)
+SELECT nome FROM aluno a
+INNER JOIN matricula m ON m.aluno_id = a.id
+except
+SELECT nome FROM ativos;
+
+
+-- ============================================================
+-- ANY
+-- ============================================================
+
+SELECT a.nome, p.nome AS plano FROM aluno a
+INNER JOIN matricula m ON m.aluno_id = a.id
+INNER JOIN plano p ON m.plano_id = p.id
+WHERE p.valor > ANY (
+	SELECT valor
+	FROM plano
+	WHERE valor <= 400
+);
+
+-- ============================================================
+--ALL
+-- ============================================================
+SELECT a.nome, p.nome AS plano FROM aluno a
+INNER JOIN matricula m ON m.aluno_id = a.id
+INNER JOIN plano p ON m.plano_id = p.id
+WHERE p.valor > ALL (
+	SELECT valor
+	FROM plano
+	WHERE valor <= 400
+);
+
+-- ============================================================
+-- WITH
+-- ============================================================
+
+WITH aluno_anual AS (
+	SELECT a.id FROM aluno a
+	INNER JOIN matricula m ON m.aluno_id = a.id
+	INNER JOIN plano p ON m.plano_id = p.id
+	WHERE p.nome = 'Anual'
+)
+select a.nome from aluno a
+INNER JOIN aluno_anual ON a.id = aluno_anual.id;
+
+-- ============================================================
+-- WITH RECURSIVE
+-- ============================================================
+
+WITH RECURSIVE progressao_carga AS (
+  
+    SELECT 
+        1 AS semana,
+        40.0 AS carga_atual
+    
+    UNION ALL
+
+    SELECT 
+        semana + 1,
+        carga_atual + 2.5
+    FROM progressao_carga
+
+    WHERE semana < 5
+)
+SELECT 
+    semana,
+    carga_atual AS carga_sugerida_kg
+FROM progressao_carga;
+
+-- ============================================================
+-- FIM
+-- ============================================================
